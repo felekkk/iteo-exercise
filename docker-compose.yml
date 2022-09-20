@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  iteo-www:
+    container_name: iteo-www
+    build: ./docker/www
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "8080:80"
+    environment:
+      - SYMFONY_ENV=env
+    links:
+      - iteo-database
+    
+  iteo-database:
+    container_name: iteo-database
+    image: postgres:14
+    environment:
+      POSTGRES_DB: iteo
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"

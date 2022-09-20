@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# chown www-data /var/www/html
+
+chown -R www-data:www-data /var/www/html/var/cache
+chown -R www-data:www-data /var/www/html/var/log
+
+exec apachectl -D FOREGROUND
