@@ -11,6 +11,7 @@
         "doctrine/doctrine-bundle": "^2.7",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.13",
+        "guzzlehttp/guzzle": "^7.0",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.8",
         "sensio/framework-extra-bundle": "^6.1",
@@ -59,7 +60,9 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "App\\": "src",
+            "App\\Api\\": "src/Api",
+            "App\\Core\\": "src/Core"
         }
     },
     "autoload-dev": {
@@ -98,6 +101,7 @@
         }
     },
     "require-dev": {
+        "phpstan/phpstan": "^1.8",
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "6.1.*",
         "symfony/css-selector": "6.1.*",
