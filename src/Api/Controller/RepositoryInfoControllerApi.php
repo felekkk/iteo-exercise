@@ -18,9 +18,8 @@ class RepositoryInfoControllerApi extends AbstractController
         Request $request,
         RepositoryService $repositoryService
     ): Response {
-        // $sort = $request->query->has('sort');
+        $sort = $request->query->get('sort') ?? 'ASC';
 
-        $sort = $request->query->get('sort');
         $repositories = $repositoryService->getRepositoriesInformation($sort);
 
         return new JsonResponse(

@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
-
-// repositoryName":"cedaro",
-// "ownerName":"better-internal-link-search",
-// "trustPoints":256.8,
-// "dateCreated":{
-//   "date":"2012-01-04 23:11:11.000000",
-//   "timezone_type":3,
-//   "timezone":"UTC"
-// }
+import { BsFillArrowDownCircleFill, BsFillArrowUpCircleFill } from "react-icons/bs";
 
 type RepositoryData = {
   repositoryName: string
@@ -19,10 +11,11 @@ type RepositoryData = {
 
 function App() {
   const [repositories, setRepositories] = useState<RepositoryData[]>([])
+  const [sort, setSort] = useState<string>('DESC')
 
   const fetchData = async () => {
     const parameters = new URLSearchParams({
-      sort: 'ASC'
+      sort: sort
     })
 
     const response = await fetch('http://localhost:8080/api/repositories?' + parameters)
@@ -33,32 +26,15 @@ function App() {
 
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [sort])
 
-  // function request<TResponse>(
-  //   url: string,
-  //   // `RequestInit` is a type for configuring 
-  //   // a `fetch` request. By default, an empty object.
-  //   config: RequestInit = {}
-     
-  // // This function is async, it will return a Promise:
-  // ): Promise<TResponse> {
-      
-  //   // Inside, we call the `fetch` function with 
-  //   // a URL and config given:
-  //   return fetch(url, config)
-  //     // When got a response call a `json` method on it
-  //     .then((response) => {
-  //       return response.json()
-  //       console.log(response.json())
-  //     })
-  //     // and return the result data.
-  //     .then((data) => data as TResponse);
-      
-  //     // We also can use some post-response
-  //     // data-transformations in the last `then` clause.
-  // }
-
+  const sortButton = () => {
+    if (sort === 'DESC') {
+      return <BsFillArrowDownCircleFill onClick={() => setSort('ASC')}/>
+    }
+    
+    return <BsFillArrowUpCircleFill onClick={() => setSort('DESC')}/>
+  }
 
   return (
     <div>
@@ -66,9 +42,11 @@ function App() {
         <thead>
           <tr>
             <th>#</th>
-            <th>Repository Name</th>
             <th>Owner Name</th>
-            <th>Date Created</th>
+            <th>Repository Name</th>
+            <th>
+              {sortButton()}Date Created
+            </th>
             <th>Trust Points</th>
           </tr>
         </thead>

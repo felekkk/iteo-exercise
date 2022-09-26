@@ -13,8 +13,8 @@ class RepositoryService
         $this->repositoryInformationRepository = $repositoryInformationRepository;
     }
 
-    public function getRepositoriesInformation(string $sort = 'DESC'): array
+    public function getRepositoriesInformation(string $sort): array
     {
-        return $this->repositoryInformationRepository->findBy([], ['repositoryCreatedAt' => 'DESC']);
+        return $this->repositoryInformationRepository->findBy([], ['repositoryCreatedAt' => $sort]);
     }
 }
