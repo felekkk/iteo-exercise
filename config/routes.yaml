@@ -1,3 +1,11 @@
-controllers:
-    resource: ../src/Controller/
+kernel:
+    resource: ../src/Kernel.php
+    type: attribute
+
+core_controllers:
+    resource: ../src/Core/Controller/
+    type: attribute
+
+api_controllers:
+    resource: ../src/Api/Controller/
     type: attribute

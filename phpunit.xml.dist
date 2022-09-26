@@ -19,7 +19,8 @@
 
     <testsuites>
         <testsuite name="Project Test Suite">
-            <directory>tests</directory>
+            <directory>src/Core/Tests</directory>
+            <directory>src/Api/Tests</directory>
         </testsuite>
     </testsuites>
 
