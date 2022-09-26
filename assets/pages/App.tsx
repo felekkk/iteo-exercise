@@ -18,7 +18,7 @@ function App() {
       sort: sort
     })
 
-    const response = await fetch('http://localhost:8080/api/repositories?' + parameters)
+    const response = await fetch('http://localhost:7777/api/repositories?' + parameters)
     const data = await response.json()
 
     setRepositories(data)
