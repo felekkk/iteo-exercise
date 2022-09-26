@@ -48,6 +48,8 @@ class ImportRepositoryCommand extends Command
             $this->importService->importRepositories($providerName, $ownerName);
         } catch(Exception $e) {
             $io->error($e->getMessage());
+            
+            return Command::FAILURE;
         }
 
         $io->success('Repositories successfully imported.');
