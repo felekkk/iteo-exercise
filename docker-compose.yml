@@ -7,7 +7,7 @@ services:
     volumes:
       - ./:/var/www/html
     ports:
-      - "8080:80"
+      - "7777:80"
     environment:
       - SYMFONY_ENV=env
     links:
