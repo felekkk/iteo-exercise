@@ -18,7 +18,7 @@ class RepositoryInformation
     private ?string $repositoryName = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $providerName = null;
+    private ?string $ownerName = null;
 
     #[ORM\Column]
     private ?float $trustPoints = null;
@@ -43,14 +43,14 @@ class RepositoryInformation
         return $this;
     }
 
-    public function getProviderName(): ?string
+    public function getOwnerName(): ?string
     {
-        return $this->providerName;
+        return $this->ownerName;
     }
 
-    public function setProviderName(string $providerName): self
+    public function setOwnerName(string $ownerName): self
     {
-        $this->providerName = $providerName;
+        $this->ownerName = $ownerName;
 
         return $this;
     }

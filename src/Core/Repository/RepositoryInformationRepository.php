@@ -39,6 +39,10 @@ class RepositoryInformationRepository extends ServiceEntityRepository
         }
     }
 
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
+    }
 //    /**
 //     * @return RepositoryInformation[] Returns an array of RepositoryInformation objects
 //     */

@@ -2,13 +2,15 @@
 
 namespace App\Core\Command;
 
-use Symfony\Component\Console\Attribute\AsCommand;
+use Exception;
+use App\Core\Service\Import\ImportService;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:import:repository',
@@ -16,28 +18,39 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class ImportRepositoryCommand extends Command
 {
+    public function __construct(
+        private ImportService $importService
+    ) {
+        $this->importService = $importService;
+
+        // you *must* call the parent constructor
+        parent::__construct();
+    }
+
     protected function configure(): void
     {
         $this
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
+            ->addArgument('ownerName', InputArgument::REQUIRED, 'Argument description')
+            ->addArgument('providerName', InputArgument::REQUIRED, 'Argument description')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $arg1 = $input->getArgument('arg1');
 
-        if ($arg1) {
-            $io->note(sprintf('You passed an argument: %s', $arg1));
+        $ownerName = (string)$input->getArgument('ownerName');
+        $providerName = (string)$input->getArgument('providerName');
+
+        try {
+            $io->section('Importing repositories.');
+            
+            $this->importService->importRepositories($providerName, $ownerName);
+        } catch(Exception $e) {
+            $io->error($e->getMessage());
         }
 
-        if ($input->getOption('option1')) {
-            // ...
-        }
-
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+        $io->success('Repositories successfully imported.');
 
         return Command::SUCCESS;
     }
