@@ -2,12 +2,13 @@
 
 namespace App\Core\Entity;
 
-use App\Core\Repository\RepositoryInformationRepository;
+use JsonSerializable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Core\Repository\RepositoryInformationRepository;
 
 #[ORM\Entity(repositoryClass: RepositoryInformationRepository::class)]
-class RepositoryInformation
+class RepositoryInformation implements JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -77,5 +78,14 @@ class RepositoryInformation
         $this->repositoryCreatedAt = $repositoryCreatedAt;
 
         return $this;
+    }
+
+    public function jsonSerialize(): array {
+        return [
+            'repositoryName' => $this->repositoryName,
+            'ownerName' => $this->ownerName,
+            'trustPoints' => $this->trustPoints,
+            'dateCreated' => $this->repositoryCreatedAt->format('Y-m-d'),
+        ];
     }
 }

@@ -7,5 +7,5 @@ core_controllers:
     type: attribute
 
 api_controllers:
-    resource: ../src/Core/Controller/
+    resource: ../src/Api/Controller/
     type: attribute
