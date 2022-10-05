@@ -9,6 +9,7 @@ use Github\Exception\RuntimeException;
 use App\Core\Service\Import\ImportService;
 use App\Core\Service\Import\Provider\GithubProvider;
 use App\Core\Repository\RepositoryInformationRepository;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class ImportServiceTest extends TestCase
 {
@@ -30,7 +31,7 @@ class ImportServiceTest extends TestCase
 
     public function testProviderNotRegistred(): void
     {
-        $service = $this->getService(true);
+        $service = $this->getService();
 
         $this->expectException(Exception::class);
 
@@ -56,11 +57,11 @@ class ImportServiceTest extends TestCase
         self::assertSame($result, 'success');
     }
 
-    private function getService(bool $withError = false): ImportService
+    private function getService(): ImportService
     {
-        $repository = $this->createMock(RepositoryInformationRepository::class);
+        $bus = $this->createMock(MessageBusInterface::class);
 
-        $service = new ImportService($repository);
+        $service = new ImportService($bus);
         
         return $service;
     }

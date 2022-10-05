@@ -9,7 +9,7 @@ use App\Core\Repository\RepositoryInformationRepository;
 
 class RepositoryServiceTest extends TestCase
 {
-    public function testGetProvider()
+    public function testGetProvider(): void
     {
         $repository = $this->createMock(RepositoryInformationRepository::class);
         $repository->expects($this->once())

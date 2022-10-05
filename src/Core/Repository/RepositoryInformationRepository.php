@@ -39,6 +39,11 @@ class RepositoryInformationRepository extends ServiceEntityRepository
         }
     }
 
+    public function findByOwnerAndRepositoryName(string $ownerName, string $repositoryName): ?RepositoryInformation
+    {
+        return $this->findOneBy(['repositoryName' => $repositoryName, 'ownerName' => $ownerName]);
+    }
+
     public function flush(): void
     {
         $this->getEntityManager()->flush();

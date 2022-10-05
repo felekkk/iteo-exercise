@@ -3,17 +3,20 @@ declare(strict_types=1);
 
 namespace App\Core\Service\Import\ValueObject;
 
-use App\Core\Service\Import\ValueObject\RepositoryInformationInterface;
+use DateTimeImmutable;
+use DateTimeInterface;
+use RuntimeException;
+use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeImmutableToDateTimeTransformer;
 
-final class GithubRepositoryInformation implements RepositoryInformationInterface
+final class GithubRepositoryInformation implements RepositoryInformation
 {
     private function __construct(
-        private string $ownerName,
-        private string $repositoryName,
-        private string $createdAt,
-        private int $commitCount,
-        private int $pullRequestCount,
-        private int $starsCount
+        private readonly string $ownerName,
+        private readonly string $repositoryName,
+        private readonly string $createdAt,
+        private readonly int $commitCount,
+        private readonly int $pullRequestCount,
+        private readonly int $starsCount
     ) {}
 
     public static function create(
@@ -34,20 +37,36 @@ final class GithubRepositoryInformation implements RepositoryInformationInterfac
         );
     }
 
-    private function countTrustPoints(): float
+    public function trustPoints(): float
     {
         // Ilość commitów + ilość PR*1.2 + ilość gwiazdek * 2
 
         return ($this->commitCount + ($this->pullRequestCount * 1.2) + $this->starsCount) * 2;
     }
 
-    public function read(): array
+    public function ownerName(): string
     {
-        return [
-            RepositoryInformationInterface::OWNER_NAME_KEY => $this->ownerName,
-            RepositoryInformationInterface::REPO_NAME_KEY => $this->repositoryName,
-            RepositoryInformationInterface::TRUST_POINTS_KEY => $this->countTrustPoints(),
-            RepositoryInformationInterface::DATE_CREATED_KEY => $this->createdAt
-        ];
+        return $this->ownerName;
+    }
+
+    public function repositoryName(): string
+    {
+        return $this->repositoryName;
+    }
+
+    /**
+     * @return DateTimeImmutable
+     * @throws RuntimeException
+     */
+    public function createdAt(): DateTimeImmutable
+    {
+        $date = DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $this->createdAt);
+        if (!$date) {
+            throw new RuntimeException(
+                sprintf('Cannot conver created at date in %s/%s repo', $this->ownerName, $this->repositoryName)
+            );
+        }
+
+        return $date;
     }
 }

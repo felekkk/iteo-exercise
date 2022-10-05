@@ -13,9 +13,7 @@ class GithubProvider extends ProviderResolver
     public function __construct(
         private string $appSecret,
         private Client $client
-    ) {
-        $this->client = $client;
-    }
+    ) {}
 
     public function getProvider(): ProviderClient
     {

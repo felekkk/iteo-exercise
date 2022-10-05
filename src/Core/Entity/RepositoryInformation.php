@@ -2,6 +2,7 @@
 
 namespace App\Core\Entity;
 
+use DateTimeImmutable;
 use JsonSerializable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,72 +17,48 @@ class RepositoryInformation implements JsonSerializable
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $repositoryName = null;
+    private string $repositoryName;
 
     #[ORM\Column(length: 255)]
-    private ?string $ownerName = null;
+    private string $ownerName;
 
     #[ORM\Column]
-    private ?float $trustPoints = null;
+    private float $trustPoints;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $repositoryCreatedAt = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private DateTimeImmutable $repositoryCreatedAt;
+
+    public function __construct(
+        string $repositoryName,
+        string $ownerName,
+        float $trustPoints,
+        DateTimeImmutable $createdAt
+    ) {
+        $this->repositoryName = $repositoryName;
+        $this->ownerName = $ownerName;
+        $this->trustPoints = $trustPoints;
+        $this->repositoryCreatedAt = $createdAt;
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getRepositoryName(): ?string
-    {
-        return $this->repositoryName;
-    }
-
-    public function setRepositoryName(string $repositoryName): self
-    {
-        $this->repositoryName = $repositoryName;
-
-        return $this;
-    }
-
-    public function getOwnerName(): ?string
-    {
-        return $this->ownerName;
-    }
-
-    public function setOwnerName(string $ownerName): self
-    {
-        $this->ownerName = $ownerName;
-
-        return $this;
-    }
-
-    public function getTrustPoints(): ?float
-    {
-        return $this->trustPoints;
-    }
-
-    public function setTrustPoints(float $trustPoints): self
+    public function changeTrustPoints(float $trustPoints): self
     {
         $this->trustPoints = $trustPoints;
 
         return $this;
     }
 
-    public function getRepositoryCreatedAt(): ?\DateTimeInterface
+    /**
+     * @return array{id: int|null, repositoryName: string, ownerName: string, trustPoints: float, dateCreated: string}
+     */
+    public function jsonSerialize(): array
     {
-        return $this->repositoryCreatedAt;
-    }
-
-    public function setRepositoryCreatedAt(\DateTimeInterface $repositoryCreatedAt): self
-    {
-        $this->repositoryCreatedAt = $repositoryCreatedAt;
-
-        return $this;
-    }
-
-    public function jsonSerialize(): array {
         return [
+            'id' => $this->getId(),
             'repositoryName' => $this->repositoryName,
             'ownerName' => $this->ownerName,
             'trustPoints' => $this->trustPoints,
