@@ -10,7 +10,7 @@ use App\Core\Service\Import\Provider\GithubProvider;
 
 class GithubProviderTest extends TestCase
 {
-    public function testGetProvider()
+    public function testGetProvider(): void
     {
         $clientMock = $this->createMock(Client::class);
         $provider = new GithubProvider('', $clientMock);
